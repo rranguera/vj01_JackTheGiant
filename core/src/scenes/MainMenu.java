@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import org.escoladeltreball.m08.rranguera.GameMain;
 
 import helpers.GameInfo;
+import huds.MainMenuButtons;
 
 /**
  * Created by isra on 31/03/2018.
@@ -23,7 +24,9 @@ public class MainMenu implements Screen {
     private OrthographicCamera mainCamera;
     private Viewport gameViewport;
 
-    private Texture mainMenuBg;
+    private Texture mainmenuBG;
+
+    private MainMenuButtons btns;
 
 
 
@@ -37,7 +40,9 @@ public class MainMenu implements Screen {
 
         gameViewport = new StretchViewport(GameInfo.WIDTH, GameInfo.HEIGHT, mainCamera);
 
-        mainMenuBg = new Texture("Backgrounds/Menu BG.png");
+        mainmenuBG = new Texture("Backgrounds/Menu BG.png");
+
+        btns = new MainMenuButtons(game);
     }
 
 
@@ -59,11 +64,17 @@ public class MainMenu implements Screen {
 
         game.getBatch().begin();        //----------------ppi de les ordres de dibuixat
 
-        game.getBatch().draw(mainMenuBg, 0, 0);
-
+        game.getBatch().draw(mainmenuBG, 0, 0);
 
 
         game.getBatch().end();          //----------------fi de les ordres de dibuixat
+
+
+        game.getBatch().setProjectionMatrix(
+                btns.getStage().getCamera().combined);
+
+        btns.getStage().draw();
+
     }
 
 
@@ -93,6 +104,7 @@ public class MainMenu implements Screen {
     @Override
     public void dispose() {
 
-        mainMenuBg.dispose();
+        mainmenuBG.dispose();
+        btns.getStage().dispose();
     }
 }
