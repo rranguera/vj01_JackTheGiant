@@ -17,6 +17,7 @@ import org.escoladeltreball.m08.rranguera.GameMain;
 
 import clouds.CloudsController;
 import helpers.GameInfo;
+import huds.UIHud;
 import player.Player;
 
 /**
@@ -45,6 +46,9 @@ public class Gameplay implements Screen {
     //TODO DELETE this later, it's just a tester (vid 7)
 //    Cloud c;
 
+
+    private UIHud hud;  // vid 25
+
     private CloudsController cloudsController;
 
     private Player player;
@@ -71,6 +75,9 @@ public class Gameplay implements Screen {
         box2DCamera.position.set(GameInfo.WIDTH/2, GameInfo.HEIGHT/2, 0);
 
         debugRenderer = new Box2DDebugRenderer();
+
+        hud = new UIHud(game);
+
         world = new World(
                     new Vector2(0, -9.8f),  //gravetat
                     true
@@ -219,6 +226,9 @@ public class Gameplay implements Screen {
         game.getBatch().setProjectionMatrix(mainCamera.combined);   //configuració intrínseca de la càmera
         mainCamera.update();
 
+        game.getBatch().setProjectionMatrix(hud.getStage().getCamera().combined);   // UI hud -vid 25-
+        hud.getStage().draw();
+
         player.updatePlayer();
 
         world.step(Gdx.graphics.getDeltaTime(), 6, 2);
@@ -227,6 +237,7 @@ public class Gameplay implements Screen {
     @Override
     public void resize(int width, int height) {
 
+        gameViewport.update(width, height);
     }
 
     @Override
