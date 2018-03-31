@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import helpers.GameInfo;
 
 /**
- * Created by iam47623980 on 7/03/18.
+ * Created by RR on 7/03/18.
  */
 
 public class Cloud extends Sprite {

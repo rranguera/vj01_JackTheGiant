@@ -11,38 +11,35 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import org.escoladeltreball.m08.rranguera.GameMain;
 
 import helpers.GameInfo;
-import huds.MainMenuButtons;
+
+
 
 /**
  * Created by RR on 31/03/2018.
  */
 
-public class MainMenu implements Screen {
+public class Highscores implements Screen {
 
     private GameMain game;
 
     private OrthographicCamera mainCamera;
     private Viewport gameViewport;
 
-    private Texture mainmenuBG;
-
-    private MainMenuButtons btns;
+    private Texture bg;
 
 
 
     //constructor
-    public MainMenu(GameMain game){
+    public Highscores(GameMain game) {
         this.game = game;
 
         mainCamera = new OrthographicCamera();
         mainCamera.setToOrtho(false, GameInfo.WIDTH, GameInfo.HEIGHT);
-        mainCamera.position.set(GameInfo.WIDTH/2, GameInfo.HEIGHT/2, 0);
+        mainCamera.position.set(GameInfo.WIDTH/2, GameInfo.HEIGHT, 0);
 
         gameViewport = new StretchViewport(GameInfo.WIDTH, GameInfo.HEIGHT, mainCamera);
 
-        mainmenuBG = new Texture("Backgrounds/Menu BG.png");
-
-        btns = new MainMenuButtons(game);
+        bg = new Texture("Backgrounds/Highscore BG.png");
     }
 
 
@@ -62,19 +59,12 @@ public class MainMenu implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
-        game.getBatch().begin();        //----------------ppi de les ordres de dibuixat
 
-        game.getBatch().draw(mainmenuBG, 0, 0);
+        game.getBatch().begin();    //----------------ppi de les ordres de dibuixat
 
+        game.getBatch().draw(bg, 0, 0);
 
-        game.getBatch().end();          //----------------fi de les ordres de dibuixat
-
-
-        game.getBatch().setProjectionMatrix(
-                btns.getStage().getCamera().combined);
-
-        btns.getStage().draw();
-
+        game.getBatch().end();      //----------------fi de les ordres de dibuixat
     }
 
 
@@ -91,20 +81,24 @@ public class MainMenu implements Screen {
 
     }
 
+
+
     @Override
     public void resume() {
 
     }
+
+
 
     @Override
     public void hide() {
 
     }
 
+
+
     @Override
     public void dispose() {
-
-        mainmenuBG.dispose();
-        btns.getStage().dispose();
+        bg.dispose();
     }
 }

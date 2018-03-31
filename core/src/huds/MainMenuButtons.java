@@ -18,9 +18,12 @@ import org.escoladeltreball.m08.rranguera.GameMain;
 
 import helpers.GameInfo;
 import scenes.Gameplay;
+import scenes.Highscores;
+
+
 
 /**
- * Created by isra on 31/03/2018.
+ * Created by RR on 31/03/2018.
  */
 
 public class MainMenuButtons {
@@ -97,7 +100,7 @@ public class MainMenuButtons {
         highscoresBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
+                game.setScreen(new Highscores(game));
             }
         });
 

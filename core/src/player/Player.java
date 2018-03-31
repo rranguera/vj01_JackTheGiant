@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.Array;
 import helpers.GameInfo;
 
 /**
- * Created by iam47623980 on 14/03/18.
+ * Created by RR on 14/03/18.
  */
 
 public class Player extends Sprite {
