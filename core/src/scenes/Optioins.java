@@ -12,6 +12,7 @@ import org.escoladeltreball.m08.rranguera.GameMain;
 
 import helpers.GameInfo;
 import huds.HighscoresButtons;
+import huds.OptionsButtons;
 
 
 
@@ -19,7 +20,8 @@ import huds.HighscoresButtons;
  * Created by RR on 31/03/2018.
  */
 
-public class Highscores implements Screen {
+
+public class Optioins implements Screen {
 
     private GameMain game;
 
@@ -28,12 +30,12 @@ public class Highscores implements Screen {
 
     private Texture bg;
 
-    private HighscoresButtons btns;
+    private OptionsButtons btns;
 
 
 
     //constructor
-    public Highscores(GameMain game) {
+    public Optioins(GameMain game) {
         this.game = game;
 
         mainCamera = new OrthographicCamera();
@@ -42,9 +44,9 @@ public class Highscores implements Screen {
 
         gameViewport = new StretchViewport(GameInfo.WIDTH, GameInfo.HEIGHT, mainCamera);
 
-        bg = new Texture("Backgrounds/Highscore BG.png");
+        bg = new Texture("Backgrounds/Options BG.png");
 
-        btns = new HighscoresButtons(game);
+        btns = new OptionsButtons(game);
     }
 
 
@@ -76,6 +78,7 @@ public class Highscores implements Screen {
                 btns.getStage().getCamera().combined);
 
         btns.getStage().draw();
+
     }
 
 
@@ -83,7 +86,6 @@ public class Highscores implements Screen {
     @Override
     public void resize(int width, int height) {
 
-        gameViewport.update(width, height);
     }
 
 

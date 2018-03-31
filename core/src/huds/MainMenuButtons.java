@@ -19,6 +19,7 @@ import org.escoladeltreball.m08.rranguera.GameMain;
 import helpers.GameInfo;
 import scenes.Gameplay;
 import scenes.Highscores;
+import scenes.Optioins;
 
 
 
@@ -108,7 +109,7 @@ public class MainMenuButtons {
         optionsBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
+                game.setScreen(new Optioins(game));
             }
         });
 
