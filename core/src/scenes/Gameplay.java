@@ -226,8 +226,8 @@ public class Gameplay implements Screen {
         game.getBatch().setProjectionMatrix(mainCamera.combined);   //configuració intrínseca de la càmera
         mainCamera.update();
 
-        game.getBatch().setProjectionMatrix(hud.getStage().getCamera().combined);   // UI hud -vid 25-
-        hud.getStage().draw();
+        game.getBatch().setProjectionMatrix(hud.getStage().getCamera().combined);   // UI hud -vid 25, min 24:10-
+        hud.getStage().draw();                                                      // TODO-REM: en afegir aquestes dues línies, el joc ja no fa scroll avall
 
         player.updatePlayer();
 
