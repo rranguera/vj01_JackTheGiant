@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import org.escoladeltreball.m08.rranguera.GameMain;
 
 import helpers.GameInfo;
+import huds.HighscoresButtons;
 
 
 
@@ -27,6 +28,8 @@ public class Highscores implements Screen {
 
     private Texture bg;
 
+    private HighscoresButtons btns;
+
 
 
     //constructor
@@ -40,6 +43,8 @@ public class Highscores implements Screen {
         gameViewport = new StretchViewport(GameInfo.WIDTH, GameInfo.HEIGHT, mainCamera);
 
         bg = new Texture("Backgrounds/Highscore BG.png");
+
+        btns = new HighscoresButtons(game);
     }
 
 
@@ -65,13 +70,19 @@ public class Highscores implements Screen {
         game.getBatch().draw(bg, 0, 0);
 
         game.getBatch().end();      //----------------fi de les ordres de dibuixat
-    }
+
+
+        game.getBatch().setProjectionMatrix(
+                btns.getStage().getCamera().combined);
+
+        btns.getStage().draw();    }
 
 
 
     @Override
     public void resize(int width, int height) {
 
+        gameViewport.update(width, height);
     }
 
 
