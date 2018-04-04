@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Random;
 
+import collectables.Collectable;
 import helpers.GameInfo;
 import player.Player;
 
@@ -20,6 +21,7 @@ public class CloudsController {
     private World world;
 
     private Array<Cloud> clouds = new Array<Cloud>();
+    private Array<Collectable> collectables = new Array<Collectable>();
 
     private final float DISTANCE_BETWEEN_CLOUDS = 250f;
     private float minX, maxX;
@@ -116,6 +118,15 @@ public class CloudsController {
 
         }
 
+        //TODO: collectable de prova, eliminar-lo. És només un test:
+        Collectable c1 = new Collectable(world, "Coin");
+        c1.setCollectablePosition(
+                clouds.get(1).getX(),
+                clouds.get(1).getY() + 40
+        );
+
+        collectables.add(c1);
+
     }
 
 
@@ -133,6 +144,16 @@ public class CloudsController {
                         c.getX() - c.getWidth()/2 + 10,
                         c.getY() - c.getHeight()/2);
             }
+        }
+    }
+
+
+
+    public void drawCollectables(SpriteBatch batch){
+
+        for (Collectable c : collectables){
+            c.updateCollectable();
+            batch.draw(c, c.getX(), c.getY());
         }
     }
 
