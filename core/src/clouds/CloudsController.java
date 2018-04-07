@@ -215,7 +215,6 @@ public class CloudsController {
             if ((collectables.get(i).getY() - GameInfo.HEIGHT/2f - 15) > cameraYPos){
                 collectables.get(i).getTexture().dispose();
                 clouds.removeIndex(i);
-//                System.out.println("S'ha eliminat un collectable de la pantalla :)");
             }
         }
     }
