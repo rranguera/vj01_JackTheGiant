@@ -114,18 +114,45 @@ public class CloudsController {
 
                 positionY -= DISTANCE_BETWEEN_CLOUDS;
                 lastCloudPositionY = positionY;
+
+
+                // Collectables:
+                if (!firstTimeArranging && c.getCloudName()!="Dark Cloud"){
+
+                    int rand = random.nextInt(10);  //0-9
+
+                    if (rand > 4) {     //Quan més baix sigui el número, més ítems collectables apareixeran
+
+                        int randomCollectable = random.nextInt(3);  //0-2
+
+                        if (randomCollectable == 0){
+                            //spawn a life...
+                            //TODO: ...si el contador de vidas es <2
+                            Collectable collectable = new Collectable(world, "Life");
+                            collectable.setCollectablePosition(
+                                    c.getX(),
+                                    c.getY() + 40
+                            );
+                            collectables.add(collectable);
+                        }
+                        else {
+                            //spawn a coin
+                            Collectable collectable = new Collectable(world, "Coin");
+                            collectable.setCollectablePosition(
+                                    c.getX(),
+                                    c.getY() + 40
+                            );
+                            collectables.add(collectable);
+                        }
+                    }
+                }
+
+
             }
+
 
         }
 
-        //TODO: collectable de prova, eliminar-lo. És només un test:
-        Collectable c1 = new Collectable(world, "Coin");
-        c1.setCollectablePosition(
-                clouds.get(1).getX(),
-                clouds.get(1).getY() + 40
-        );
-
-        collectables.add(c1);
 
     }
 
@@ -178,6 +205,21 @@ public class CloudsController {
             positionClouds(false);
         }
     }
+
+
+
+    public void removeOffscreenCollectables(){
+
+        for (int i=0; i<collectables.size; i++){
+
+            if ((collectables.get(i).getY() - GameInfo.HEIGHT/2f - 15) > cameraYPos){
+                collectables.get(i).getTexture().dispose();
+                clouds.removeIndex(i);
+//                System.out.println("S'ha eliminat un collectable de la pantalla :)");
+            }
+        }
+    }
+
 
 
     public void setCameraYPos (float cameraYPos){

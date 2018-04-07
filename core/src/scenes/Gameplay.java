@@ -128,6 +128,7 @@ public class Gameplay implements Screen, ContactListener {
         checkBackgroundsOutOfBounds();
         cloudsController.setCameraYPos(mainCamera.position.y);
         cloudsController.createAndArrangeNewClouds();
+        cloudsController.removeOffscreenCollectables();
     }
 
 
@@ -228,11 +229,11 @@ public class Gameplay implements Screen, ContactListener {
         //és el requadre groc al voltant dels núvols/etc (segons com es posiciona malament/no es veu pq queda fora):
         debugRenderer.render(world, box2DCamera.combined);
 
-        game.getBatch().setProjectionMatrix(mainCamera.combined);   //configuració intrínseca de la càmera
-        mainCamera.update();
-
         game.getBatch().setProjectionMatrix(hud.getStage().getCamera().combined);   // UI hud -vid 25, min 24:10-
         hud.getStage().draw();                                                      // TODO-REM: en afegir aquestes dues línies, el joc ja no fa scroll avall
+
+        game.getBatch().setProjectionMatrix(mainCamera.combined);   //configuració intrínseca de la càmera
+        mainCamera.update();
 
         player.updatePlayer();
 
