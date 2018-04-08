@@ -153,6 +153,7 @@ public class Gameplay implements Screen, ContactListener {
             cloudsController.setCameraYPos(mainCamera.position.y);
             cloudsController.createAndArrangeNewClouds();
             cloudsController.removeOffscreenCollectables();
+            checkPlayersBounds();
         }
     }
 
@@ -211,6 +212,72 @@ public class Gameplay implements Screen, ContactListener {
     }
 
 
+    void checkPlayersBounds(){
+
+        //REM: en les coordenades en pantalla, el (0,0) és a la part inferior esquerra.
+
+        final boolean DEBUG_VERVOSE_MODE = false;
+
+
+        int margeExteriorVerticalExtra = 300;
+
+        // límit superior
+        if ((player.getY() - GameInfo.HEIGHT/2 - player.getHeight()/2)
+                > mainCamera.position.y + margeExteriorVerticalExtra){
+            GameManager.getInstance().isPaused = true;
+
+            if (DEBUG_VERVOSE_MODE){
+                System.out.println("Player OUT of bounds -top-");
+                System.out.println("cam position y:" + mainCamera.position.y);
+                System.out.println("player pos" + player.getY() + GameInfo.HEIGHT/2 + player.getHeight()/2);
+            }
+
+        }
+
+
+        // límit inferior
+        if ((player.getY() + GameInfo.HEIGHT/2 + player.getHeight()/2)
+                < mainCamera.position.y  - margeExteriorVerticalExtra){
+            GameManager.getInstance().isPaused = true;
+
+            if (DEBUG_VERVOSE_MODE){
+                System.out.println("Player OUT of bounds -per baix-");
+                System.out.println("cam position y:" + mainCamera.position.y);
+                System.out.println("player pos" + player.getY() + GameInfo.HEIGHT/2 + player.getHeight()/2);
+            }
+        }
+
+
+        int margeExteriorHoritzontalExtra = 150;
+
+        // límit dret
+        if (player.getX() > GameInfo.WIDTH + margeExteriorHoritzontalExtra ){
+            GameManager.getInstance().isPaused = true;
+
+            if (DEBUG_VERVOSE_MODE){
+                System.out.println("Player OUT of bounds -right-");
+                System.out.println("cam position y:" + mainCamera.position.y);
+                System.out.println("player pos" + player.getY() + GameInfo.HEIGHT/2 + player.getHeight()/2);
+            }
+
+        }
+        // límit esquerre
+        else if (player.getX() < (0 - player.getWidth() - margeExteriorHoritzontalExtra) ){
+            GameManager.getInstance().isPaused = true;
+
+            if (DEBUG_VERVOSE_MODE){
+                System.out.println("Player OUT of bounds -left-");
+                System.out.println("cam position y:" + mainCamera.position.y);
+                System.out.println("player pos" + player.getY() + GameInfo.HEIGHT/2 + player.getHeight()/2);
+            }
+
+        }
+
+
+        // **Tots aquests if es podrien agrupar en un sol, amb ORs (com s'explica al vid 36 al minut 11), però prefereixo tenir-ho separat per a poder mostrar en modo debugging els valors del player i la cam
+
+
+    }
 
 
 
@@ -252,7 +319,7 @@ public class Gameplay implements Screen, ContactListener {
 
 
         //és el requadre groc al voltant dels núvols/etc (segons com es posiciona malament/no es veu pq queda fora):
-        debugRenderer.render(world, box2DCamera.combined);
+//        debugRenderer.render(world, box2DCamera.combined);        // *per a DEBUGGER MODE
 
         game.getBatch().setProjectionMatrix(hud.getStage().getCamera().combined);   // UI hud -vid 25, min 24:10-
         hud.getStage().draw();                                                      // TODO-REM: en afegir aquestes dues línies, el joc ja no fa scroll avall
