@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import helpers.GameManager;
 import scenes.Gameplay;
 import scenes.MainMenu;
 
@@ -21,6 +22,9 @@ public class GameMain extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 //		img = new Texture("Backgrounds/Game BG.png");
+
+        // creem (o carreguem) el fitxer de configuració
+        GameManager.getInstance().initializeGameData();
 
 //		setScreen(new Gameplay(this));		//Esta línia comença directament en el joc, sense menú previ
         setScreen(new MainMenu(this));

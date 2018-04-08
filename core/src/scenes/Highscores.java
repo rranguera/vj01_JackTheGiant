@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import org.escoladeltreball.m08.rranguera.GameMain;
 
 import helpers.GameInfo;
-import huds.HighscoresButtons;
+import huds.HighscoreButtons;
 
 
 
@@ -28,7 +28,7 @@ public class Highscores implements Screen {
 
     private Texture bg;
 
-    private HighscoresButtons btns;
+    private HighscoreButtons btns;
 
 
 
@@ -44,7 +44,7 @@ public class Highscores implements Screen {
 
         bg = new Texture("Backgrounds/Highscore BG.png");
 
-        btns = new HighscoresButtons(game);
+        btns = new HighscoreButtons(game);
     }
 
 

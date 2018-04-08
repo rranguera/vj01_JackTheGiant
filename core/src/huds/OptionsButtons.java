@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import org.escoladeltreball.m08.rranguera.GameMain;
 
 import helpers.GameInfo;
+import helpers.GameManager;
 import scenes.Gameplay;
 import scenes.Highscores;
 import scenes.MainMenu;
@@ -89,10 +90,62 @@ public class OptionsButtons {
 
         backBtn.setPosition(17, 17, Align.bottomLeft);
 
+
+/*
         //TODO: REM treure aquest (prova):      -vid 24-
         checkSign.setPosition(GameInfo.WIDTH/2 + 76 , mediumBtn.getY()+13, Align.bottomLeft);
+*/
+        positionTheDifficultySign();
 
     }
+
+
+
+    private void positionTheDifficultySign() {
+
+        if (GameManager.getInstance().gameData.isEasyDifficulty()){
+            checkSign.setPosition(GameInfo.WIDTH/2 + 76 , easyBtn.getY()+13, Align.bottomLeft);
+        }
+
+        else if (GameManager.getInstance().gameData.isMediumDifficulty()){
+            checkSign.setPosition(GameInfo.WIDTH/2 + 76 , mediumBtn.getY()+13, Align.bottomLeft);
+        }
+
+        else if (GameManager.getInstance().gameData.isHardDifficulty()){
+            checkSign.setPosition(GameInfo.WIDTH/2 + 76 , hardBtn.getY()+13, Align.bottomLeft);
+        }
+
+    }
+
+
+
+    void changeDifficulty (int diff){
+
+        switch (diff){
+
+            case 0:
+                GameManager.getInstance().gameData.setEasyDifficulty(true);
+                GameManager.getInstance().gameData.setMediumDifficulty(false);
+                GameManager.getInstance().gameData.setHardDifficulty(false);
+                break;
+
+            case 1:
+                GameManager.getInstance().gameData.setEasyDifficulty(false);
+                GameManager.getInstance().gameData.setMediumDifficulty(true);
+                GameManager.getInstance().gameData.setHardDifficulty(false);
+                break;
+
+            case 2:
+                GameManager.getInstance().gameData.setEasyDifficulty(false);
+                GameManager.getInstance().gameData.setMediumDifficulty(false);
+                GameManager.getInstance().gameData.setHardDifficulty(true);
+                break;
+
+        }
+
+        GameManager.getInstance().saveData();
+    }
+
 
 
     void addAllListeners(){
@@ -101,7 +154,14 @@ public class OptionsButtons {
         easyBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+/*
                 //TODO: guardar nivell de dificultat
+                GameManager.getInstance().gameData.setEasyDifficulty(true);
+                GameManager.getInstance().gameData.setMediumDifficulty(false);
+                GameManager.getInstance().gameData.setHardDifficulty(false);
+*/
+                changeDifficulty(0);
+
                 checkSign.setY(easyBtn.getY() + 13);
             }
         });
@@ -109,6 +169,7 @@ public class OptionsButtons {
         mediumBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                changeDifficulty(1);
                 checkSign.setY(mediumBtn.getY() + 13);
             }
         });
@@ -116,6 +177,7 @@ public class OptionsButtons {
         hardBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                changeDifficulty(2);
                 checkSign.setY(hardBtn.getY() + 13);
             }
         });

@@ -51,6 +51,10 @@ public class Gameplay implements Screen, ContactListener {
     private Sprite[] bgs;
     private float lastYPosition;
 
+    private float cameraSpeed = 10;     // vid 43
+    private float maxSpeed = 10;        // vid 43
+    private float acceleration = 10;    // vid 43
+
     private boolean touchedForTheFirstTime = false;
 
 
@@ -114,6 +118,8 @@ public class Gameplay implements Screen, ContactListener {
 
 
         createBackgrounds();
+
+        setCameraSpeed();
     }
 
 
@@ -155,7 +161,7 @@ public class Gameplay implements Screen, ContactListener {
         }
         else {
             handleInput(dt);
-            moveCamera();
+            moveCamera(dt);
             checkBackgroundsOutOfBounds();
             cloudsController.setCameraYPos(mainCamera.position.y);
             cloudsController.createAndArrangeNewClouds();
@@ -167,9 +173,34 @@ public class Gameplay implements Screen, ContactListener {
 
 
 
-    void moveCamera() {
+    void moveCamera(float delta) {
         //velocitat de desplaçament vertical de la càmera/joc:
-        mainCamera.position.y -= 3;
+        mainCamera.position.y -= cameraSpeed * delta;
+
+        cameraSpeed += acceleration * delta;
+
+        if (cameraSpeed > maxSpeed){
+            cameraSpeed = maxSpeed;
+        }
+    }
+
+
+    void setCameraSpeed(){      // velocitats del joc, en funció de lo elegit al menú d'opcions
+
+        if (GameManager.getInstance().gameData.isEasyDifficulty()){
+            cameraSpeed = 60;
+            maxSpeed = 90;
+//            System.out.println("adjustada velocitat a mode EASY");
+        }
+        else if (GameManager.getInstance().gameData.isMediumDifficulty()){
+            cameraSpeed = 100;
+            maxSpeed = 120;
+        }
+        else if (GameManager.getInstance().gameData.isHardDifficulty()){
+            cameraSpeed = 140;
+            maxSpeed = 160;
+//            System.out.println("adjustada velocitat a mode HARD");
+        }
     }
 
 
@@ -340,9 +371,11 @@ public class Gameplay implements Screen, ContactListener {
 
 
             //mirar si s'ha aconseguit un highscore
+            GameManager.getInstance().checkForNewHighscores();
 
 
             //show the end score
+            hud.createGameOverPanel();
 
 
             // tornar al main menu

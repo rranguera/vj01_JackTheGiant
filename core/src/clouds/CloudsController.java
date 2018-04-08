@@ -9,6 +9,7 @@ import java.util.Random;
 
 import collectables.Collectable;
 import helpers.GameInfo;
+import helpers.GameManager;
 import player.Player;
 
 /**
@@ -126,14 +127,26 @@ public class CloudsController {
                         int randomCollectable = random.nextInt(3);  //0-2
 
                         if (randomCollectable == 0){
-                            //spawn a life...
-                            //TODO: ...si el contador de vidas es <2
-                            Collectable collectable = new Collectable(world, "Life");
-                            collectable.setCollectablePosition(
-                                    c.getX(),
-                                    c.getY() + 40
-                            );
-                            collectables.add(collectable);
+                            //spawn a life... si el contador de vidas es <2
+
+                            if (GameManager.getInstance().lifeScore < 2){
+                                Collectable collectable = new Collectable(world, "Life");
+                                collectable.setCollectablePosition(
+                                        c.getX(),
+                                        c.getY() + 40
+                                );
+                                collectables.add(collectable);
+                            }
+                            else {
+                                //spawn a coin instead a life
+                                Collectable collectable = new Collectable(world, "Coin");
+                                collectable.setCollectablePosition(
+                                        c.getX(),
+                                        c.getY() + 40
+                                );
+                                collectables.add(collectable);
+                            }
+
                         }
                         else {
                             //spawn a coin

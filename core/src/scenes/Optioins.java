@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import org.escoladeltreball.m08.rranguera.GameMain;
 
 import helpers.GameInfo;
-import huds.HighscoresButtons;
 import huds.OptionsButtons;
 
 
