@@ -154,6 +154,17 @@ public class CloudsController {
         }
 
 
+/*
+        // Bloc per a testejar (situa un ítem al 2n núvol):
+
+        Collectable collectable = new Collectable(world, "Life");
+        collectable.setCollectablePosition(
+                clouds.get(1).getX(),
+                clouds.get(1).getY() + 40
+        );
+        collectables.add(collectable);
+*/
+
     }
 
 
