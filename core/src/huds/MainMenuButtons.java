@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
@@ -20,6 +23,7 @@ import helpers.GameInfo;
 import helpers.GameManager;
 import scenes.Gameplay;
 import scenes.Highscores;
+import scenes.MainMenu;
 import scenes.Optioins;
 
 
@@ -92,14 +96,30 @@ public class MainMenuButtons {
 
 
     void addAllListeners(){
+
         playBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 //                System.out.println("S'ha apretat el botó PLAY");
                 GameManager.getInstance().gameStartedFromMAinMenu = true;
-                game.setScreen(new Gameplay(game));     //inicia la pantalla de partida (Gameplay.java)
+
+
+                RunnableAction run = new RunnableAction();
+                run.setRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        game.setScreen(new Gameplay(game));     //inicia la pantalla de partida (Gameplay.java)
+                    }
+                });
+
+                SequenceAction seqActn = new SequenceAction();
+                seqActn.addAction(Actions.fadeOut(0.3f));
+                seqActn.addAction(run);
+
+                stage.addAction(seqActn);
             }
         });
+
 
         highscoresBtn.addListener(new ChangeListener() {
             @Override

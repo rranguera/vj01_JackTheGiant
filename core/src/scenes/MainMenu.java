@@ -58,7 +58,7 @@ public class MainMenu implements Screen {
     public void render(float delta) {
 
         // limpiem la pantalla abans de fer res
-        Gdx.gl.glClearColor(1, 0, 1, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);    // BGcolor negre
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
@@ -74,6 +74,7 @@ public class MainMenu implements Screen {
                 btns.getStage().getCamera().combined);
 
         btns.getStage().draw();
+        btns.getStage().act();
 
     }
 

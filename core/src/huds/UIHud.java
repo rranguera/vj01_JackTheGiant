@@ -253,6 +253,17 @@ public class UIHud {
 
 
 
+    public void decrementLife(){
+
+        GameManager.getInstance().lifeScore--;
+
+        if (GameManager.getInstance().lifeScore >= 0){
+            lifeLbl.setText("x"+GameManager.getInstance().lifeScore);
+        }
+    }
+
+
+
     public Stage getStage() {
         return stage;
     }

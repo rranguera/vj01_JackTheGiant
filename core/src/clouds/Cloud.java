@@ -64,6 +64,7 @@ public class Cloud extends Sprite {
         fixtureDef.shape = shape;
 
         Fixture fixture = body.createFixture(fixtureDef);
+        fixture.setUserData(cloudName);
 
         shape.dispose();    //La shape creada 4 línies més amunt, ja l'hem utilitzat en la línia superior, i com q ja tenim la fixture, ja no ens cal més la shape
     }

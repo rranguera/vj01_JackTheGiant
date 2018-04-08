@@ -15,6 +15,9 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -60,6 +63,8 @@ public class Gameplay implements Screen, ContactListener {
     private CloudsController cloudsController;
 
     private Player player;
+
+    private float lastPlayerY;      //vid 37, emprat per a la pauntuació
 
 
 
@@ -107,6 +112,7 @@ public class Gameplay implements Screen, ContactListener {
         player = cloudsController.positionThePlayerAtStart(player);
 
 
+
         createBackgrounds();
     }
 
@@ -133,6 +139,7 @@ public class Gameplay implements Screen, ContactListener {
             if (Gdx.input.justTouched()){
                 touchedForTheFirstTime = true;
                 GameManager.getInstance().isPaused = false;
+                lastPlayerY = player.getY();
             }
         }
     }
@@ -154,6 +161,7 @@ public class Gameplay implements Screen, ContactListener {
             cloudsController.createAndArrangeNewClouds();
             cloudsController.removeOffscreenCollectables();
             checkPlayersBounds();
+            countScore();
         }
     }
 
@@ -224,7 +232,13 @@ public class Gameplay implements Screen, ContactListener {
         // límit superior
         if ((player.getY() - GameInfo.HEIGHT/2 - player.getHeight()/2)
                 > mainCamera.position.y + margeExteriorVerticalExtra){
-            GameManager.getInstance().isPaused = true;
+
+//            GameManager.getInstance().isPaused = true;        // passat a un altre lloc (vid 38, minut 1)
+
+            if (!player.isDead()){
+                playerDied();
+            }
+
 
             if (DEBUG_VERVOSE_MODE){
                 System.out.println("Player OUT of bounds -top-");
@@ -238,7 +252,13 @@ public class Gameplay implements Screen, ContactListener {
         // límit inferior
         if ((player.getY() + GameInfo.HEIGHT/2 + player.getHeight()/2)
                 < mainCamera.position.y  - margeExteriorVerticalExtra){
-            GameManager.getInstance().isPaused = true;
+
+//            GameManager.getInstance().isPaused = true;        // passat a un altre lloc (vid 38, minut 1)
+
+            if (!player.isDead()){
+                playerDied();
+            }
+
 
             if (DEBUG_VERVOSE_MODE){
                 System.out.println("Player OUT of bounds -per baix-");
@@ -252,7 +272,13 @@ public class Gameplay implements Screen, ContactListener {
 
         // límit dret
         if (player.getX() > GameInfo.WIDTH + margeExteriorHoritzontalExtra ){
-            GameManager.getInstance().isPaused = true;
+
+//            GameManager.getInstance().isPaused = true;        // passat a un altre lloc (vid 38, minut 1)
+
+            if (!player.isDead()){
+                playerDied();
+            }
+
 
             if (DEBUG_VERVOSE_MODE){
                 System.out.println("Player OUT of bounds -right-");
@@ -263,7 +289,13 @@ public class Gameplay implements Screen, ContactListener {
         }
         // límit esquerre
         else if (player.getX() < (0 - player.getWidth() - margeExteriorHoritzontalExtra) ){
-            GameManager.getInstance().isPaused = true;
+
+//            GameManager.getInstance().isPaused = true;        // passat a un altre lloc (vid 38, minut 1)
+
+            if (!player.isDead()){
+                playerDied();
+            }
+
 
             if (DEBUG_VERVOSE_MODE){
                 System.out.println("Player OUT of bounds -left-");
@@ -281,6 +313,79 @@ public class Gameplay implements Screen, ContactListener {
 
 
 
+    void countScore(){
+        if (lastPlayerY > player.getY()){
+            hud.incrementScore(1);
+            lastPlayerY = player.getY();
+        }
+    }
+
+
+
+    void playerDied(){
+
+        GameManager.getInstance().isPaused = true;
+
+        //decrement life display
+        hud.decrementLife();
+
+        player.setDead(true);
+
+        player.setPosition(-1000, -1000);       // "eliminar" el player de la pantalla
+
+
+
+        if (GameManager.getInstance().lifeScore < 0){
+            //no queden vides
+
+
+            //mirar si s'ha aconseguit un highscore
+
+
+            //show the end score
+
+
+            // tornar al main menu
+            RunnableAction run = new RunnableAction();
+            run.setRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    game.setScreen(new MainMenu(game));
+                }
+            });
+
+            SequenceAction seqActn = new SequenceAction();
+            seqActn.addAction(Actions.delay(3f));
+            seqActn.addAction(Actions.fadeOut(1f));
+            seqActn.addAction(run);
+
+            hud.getStage().addAction(seqActn);
+
+
+        }
+        else {
+            // reload game (reiniciar partida)
+
+            RunnableAction run = new RunnableAction();
+            run.setRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    game.setScreen(new Gameplay(game));
+                }
+            });
+
+            SequenceAction seqActn = new SequenceAction();
+            seqActn.addAction(Actions.delay(3f));
+            seqActn.addAction(Actions.fadeOut(1f));
+            seqActn.addAction(run);
+
+            hud.getStage().addAction(seqActn);
+        }
+    }
+
+
+
+
     @Override
     public void show() {
 
@@ -293,7 +398,7 @@ public class Gameplay implements Screen, ContactListener {
 
         update(delta);
 
-        Gdx.gl.glClearColor(1, 0, 1, 1);
+        Gdx.gl.glClearColor(1, 1, 1, 1);    // BGcolor blanc
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
@@ -322,7 +427,8 @@ public class Gameplay implements Screen, ContactListener {
 //        debugRenderer.render(world, box2DCamera.combined);        // *per a DEBUGGER MODE
 
         game.getBatch().setProjectionMatrix(hud.getStage().getCamera().combined);   // UI hud -vid 25, min 24:10-
-        hud.getStage().draw();                                                      // TODO-REM: en afegir aquestes dues línies, el joc ja no fa scroll avall
+        hud.getStage().draw();                                                      // TODO-REM: en afegir aquestes dues línies després de la següent setProjectionMatrix, el joc ja no fa scroll avall. Han d'estar abans de la mainCamera
+        hud.getStage().act();
 
         game.getBatch().setProjectionMatrix(mainCamera.combined);   //configuració intrínseca de la càmera
         mainCamera.update();
@@ -403,6 +509,16 @@ public class Gameplay implements Screen, ContactListener {
             body2.setUserData("Remove");
             cloudsController.removeCollectables();
             hud.incrementLifes();
+        }
+
+
+        if (body1.getUserData() == "Player" && body2.getUserData() == "Dark Cloud") {
+            //collided with Dark Cloud
+//            System.out.println("collided with Dark Cloud");
+
+            if (!player.isDead()){
+                playerDied();
+            }
         }
 
     }
