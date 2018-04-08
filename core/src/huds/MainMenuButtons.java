@@ -191,7 +191,7 @@ public class MainMenuButtons {
     }
 
 
-    public void dispose() { //he afegit jo aquest mètode, però crec que no s'executa mai
+    public void dispose() {     // **?? He afegit jo aquest mètode, però crec que no s'executa mai
         System.out.println("executat el dispose() de MainMenuButtons.java");
         buttonSound.dispose();
     }
