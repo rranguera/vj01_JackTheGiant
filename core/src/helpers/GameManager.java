@@ -1,6 +1,7 @@
 package helpers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 
@@ -24,6 +25,8 @@ public class GameManager {
     public boolean isPaused = true;
 
     public int lifeScore, coinScore, score;
+
+    private Music music;
 
 
 
@@ -90,6 +93,29 @@ public class GameManager {
 
 
     }
+
+
+
+    public void playMusic(){
+        if (music == null){
+//            music = Gdx.audio.newMusic(Gdx.files.internal("Sounds/Background.mp3"));
+            music = Gdx.audio.newMusic(Gdx.files.internal("Sounds/OMFG - Hello.mp3"));
+            System.out.println("musica inicialitzada");
+        }
+
+        if (!music.isPlaying()){
+            music.play();
+            System.out.println("musica reproduint-se");
+        }
+    }
+
+    public void stopMusic() {
+        if (music.isPlaying()){
+            music.stop();
+            music.dispose();
+        }
+    }
+
 
 
     public static GameManager getInstance() {

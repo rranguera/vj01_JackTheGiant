@@ -2,6 +2,7 @@ package huds;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -44,6 +45,10 @@ public class MainMenuButtons {
     private ImageButton quitBtn;
     private ImageButton musicBtn;
 
+    private Sound buttonSound;
+
+
+
 
 
     //constructor
@@ -64,6 +69,9 @@ public class MainMenuButtons {
         stage.addActor(quitBtn);
         stage.addActor(musicBtn);
 
+        checkMusic();
+
+        buttonSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Click Sound.wav"));
     }
 
 
@@ -100,6 +108,7 @@ public class MainMenuButtons {
         playBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                buttonSound.play();
 //                System.out.println("S'ha apretat el botó PLAY");
                 GameManager.getInstance().gameStartedFromMAinMenu = true;
 
@@ -124,6 +133,7 @@ public class MainMenuButtons {
         highscoresBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                buttonSound.play();
                 game.setScreen(new Highscores(game));
             }
         });
@@ -131,6 +141,7 @@ public class MainMenuButtons {
         optionsBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                buttonSound.play();
                 game.setScreen(new Optioins(game));
             }
         });
@@ -138,24 +149,50 @@ public class MainMenuButtons {
         quitBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
+                buttonSound.play();
+                //TODO pdt Sortir
+                System.out.println("-pendent-");
             }
         });
+
 
         musicBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 
+                buttonSound.play();
+
+                if (GameManager.getInstance().gameData.isMusicOn()){
+                    GameManager.getInstance().gameData.setMusicOn(false);
+                    GameManager.getInstance().stopMusic();
+                }
+                else {
+                    GameManager.getInstance().gameData.setMusicOn(true);
+                    GameManager.getInstance().playMusic();
+                }
+                GameManager.getInstance().saveData();
             }
         });
-
 
     }
 
 
 
+    void checkMusic(){
+        if (GameManager.getInstance().gameData.isMusicOn()){
+            GameManager.getInstance().playMusic();
+        }
+    }
+
+
 
     public Stage getStage() {
         return stage;
+    }
+
+
+    public void dispose() { //he afegit jo aquest mètode, però crec que no s'executa mai
+        System.out.println("executat el dispose() de MainMenuButtons.java");
+        buttonSound.dispose();
     }
 }

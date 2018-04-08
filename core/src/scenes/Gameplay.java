@@ -3,6 +3,7 @@ package scenes;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -70,6 +71,7 @@ public class Gameplay implements Screen, ContactListener {
 
     private float lastPlayerY;      //vid 37, emprat per a la pauntuació
 
+    private Sound coinSound, lifeSound, killedSound;
 
 
 
@@ -120,6 +122,11 @@ public class Gameplay implements Screen, ContactListener {
         createBackgrounds();
 
         setCameraSpeed();
+
+//        coinSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Coin Sound.wav"));
+        coinSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Mario Coin.wav"));
+        lifeSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Life Sound.wav"));
+        killedSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Wilhelm_Scream.wav"));
     }
 
 
@@ -355,6 +362,8 @@ public class Gameplay implements Screen, ContactListener {
 
     void playerDied(){
 
+        killedSound.play();
+
         GameManager.getInstance().isPaused = true;
 
         //decrement life display
@@ -507,6 +516,10 @@ public class Gameplay implements Screen, ContactListener {
 
         debugRenderer.dispose();
 
+        coinSound.dispose();
+        lifeSound.dispose();
+        killedSound.dispose();
+
     }   //implements Screen de com.badlogic.gdx
 
 
@@ -535,6 +548,7 @@ public class Gameplay implements Screen, ContactListener {
             body2.setUserData("Remove");
             cloudsController.removeCollectables();
             hud.incrementCoins();
+            coinSound.play();
         }
         else if (body1.getUserData() == "Player" && body2.getUserData() == "Life"){
             //collided with the life
@@ -542,6 +556,7 @@ public class Gameplay implements Screen, ContactListener {
             body2.setUserData("Remove");
             cloudsController.removeCollectables();
             hud.incrementLifes();
+            lifeSound.play();
         }
 
 
@@ -549,6 +564,7 @@ public class Gameplay implements Screen, ContactListener {
             //collided with Dark Cloud
 //            System.out.println("collided with Dark Cloud");
 
+//            killedSound.play();
             if (!player.isDead()){
                 playerDied();
             }
