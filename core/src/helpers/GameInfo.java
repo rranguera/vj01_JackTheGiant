@@ -11,4 +11,9 @@ public class GameInfo {
     public static final int PPM = 100;      // relació "pixels per meter"
 
 
+    public static final short DEFAUL = 1;
+    public static final short PLAYER = 2;
+    public static final short COLLECTABLE = 4;
+    public static final short DESTROYED = 6;
+
 }

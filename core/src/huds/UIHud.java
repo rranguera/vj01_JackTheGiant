@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import org.escoladeltreball.m08.rranguera.GameMain;
 
 import helpers.GameInfo;
+import helpers.GameManager;
 import scenes.MainMenu;
 
 
@@ -54,6 +55,15 @@ public class UIHud {
 
         Gdx.input.setInputProcessor(stage);
 
+
+        if (GameManager.getInstance().gameStartedFromMAinMenu){
+            // El joc s'ha iniciat des del menú (no és un reinici de quan ha mort), és l'inici de la partida, per tant definim els valors inicials:
+            GameManager.getInstance().gameStartedFromMAinMenu = false;
+
+            GameManager.getInstance().coinScore = 0;
+            GameManager.getInstance().score = 0;
+            GameManager.getInstance().lifeScore = 2;
+        }
 
         createUIImgs();
         createUILabels();
@@ -133,9 +143,11 @@ public class UIHud {
 
         BitmapFont ingameFont = generator.generateFont(parameters);
 
-        coinLbl  = new Label("x0", new Label.LabelStyle(ingameFont, Color.WHITE));
-        lifeLbl  = new Label("x2", new Label.LabelStyle(ingameFont, Color.WHITE));
-        scoreLbl = new Label("100", new Label.LabelStyle(ingameFont, Color.WHITE));
+        coinLbl  = new Label("x"+GameManager.getInstance().coinScore, new Label.LabelStyle(ingameFont, Color.WHITE));
+        lifeLbl  = new Label("x"+GameManager.getInstance().lifeScore, new Label.LabelStyle(ingameFont, Color.WHITE));
+        //scoreLbl = new Label(String.valueOf(GameManager.getInstance().score), new Label.LabelStyle(ingameFont, Color.WHITE));
+        //alternativa:
+        scoreLbl = new Label(""+GameManager.getInstance().score, new Label.LabelStyle(ingameFont, Color.WHITE));
 
 /* Posicionament d'elements ubstituit per taules, en el constructor
         coinLbl.setPosition(GameInfo.WIDTH/2, GameInfo.HEIGHT/2 - 120);
@@ -160,11 +172,14 @@ public class UIHud {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 
-                //Pausa:
-                //TODO
+                if (!GameManager.getInstance().isPaused){   //si no està pausat ja, fem la pausa:
 
-                //Panell de pausa:
-                createPausePanel();
+                    //Pausem el joc:
+                    GameManager.getInstance().isPaused = true;
+
+                    //Mostrem el panell de pausa:
+                    createPausePanel();
+                }
             }
         });
 
@@ -191,6 +206,7 @@ public class UIHud {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 removePausePanel();
+                GameManager.getInstance().isPaused = false;
             }
         });
 
@@ -215,6 +231,26 @@ public class UIHud {
         resumeBtn.remove();
         pausePanel.remove();
     }
+
+
+
+    public void incrementScore (int inc){
+        GameManager.getInstance().score += inc;
+        scoreLbl.setText(String.valueOf(GameManager.getInstance().score));
+    }
+
+    public void incrementCoins(){
+        GameManager.getInstance().coinScore++;
+        scoreLbl.setText("x"+GameManager.getInstance().coinScore);
+        incrementScore(200);
+    }
+
+    public void incrementLifes(){
+        GameManager.getInstance().lifeScore++;
+        lifeLbl.setText("x"+GameManager.getInstance().lifeScore);
+        incrementScore(300);
+    }
+
 
 
     public Stage getStage() {

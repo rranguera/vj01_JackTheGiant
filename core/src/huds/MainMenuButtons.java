@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import org.escoladeltreball.m08.rranguera.GameMain;
 
 import helpers.GameInfo;
+import helpers.GameManager;
 import scenes.Gameplay;
 import scenes.Highscores;
 import scenes.Optioins;
@@ -95,6 +96,7 @@ public class MainMenuButtons {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 //                System.out.println("S'ha apretat el botó PLAY");
+                GameManager.getInstance().gameStartedFromMAinMenu = true;
                 game.setScreen(new Gameplay(game));     //inicia la pantalla de partida (Gameplay.java)
             }
         });

@@ -67,11 +67,15 @@ public class Player extends Sprite {
         );
 
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.density = 4;     //mass of the body
-        fixtureDef.friction = 2;    //per a que el player no rellisqui
+//        fixtureDef.density = 4f;     //mass of the body
+        fixtureDef.density = 0f;     //**al vid 30 (min 2:05) apareix 0, quan en el seu moment haviem posat 4)
+        fixtureDef.friction = 2f;    //per a que el player no rellisqui
         fixtureDef.shape = shape;
+        fixtureDef.filter.categoryBits = GameInfo.PLAYER;
+        fixtureDef.filter.maskBits = GameInfo.DEFAUL | GameInfo.COLLECTABLE;    //con qué elementos (los de estas categorías) colisionará el player
 
         Fixture fixture = body.createFixture(fixtureDef);       //**ATENCIÓ, que aquí no fa new Fixture, sino body.createFixture(...)
+        fixture.setUserData("Player");
 
         shape.dispose();
     }

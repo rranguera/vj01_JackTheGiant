@@ -186,6 +186,19 @@ public class CloudsController {
 
 
 
+    public void removeCollectables(){
+
+        for (int i=0; i<collectables.size; i++){
+            if (collectables.get(i).getFixture().getUserData() == "Remove"){
+                collectables.get(i).changeFilter();                             // **??
+                collectables.get(i).getTexture().dispose();
+                collectables.removeIndex(i);
+            }
+        }
+    }
+
+
+
     public void createAndArrangeNewClouds(){
 
         for (int i=0; i<clouds.size; i++){

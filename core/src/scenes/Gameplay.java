@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -21,6 +22,7 @@ import org.escoladeltreball.m08.rranguera.GameMain;
 
 import clouds.CloudsController;
 import helpers.GameInfo;
+import helpers.GameManager;
 import huds.UIHud;
 import player.Player;
 
@@ -45,6 +47,8 @@ public class Gameplay implements Screen, ContactListener {
     private Sprite bg1, bg2, bg3;
     private Sprite[] bgs;
     private float lastYPosition;
+
+    private boolean touchedForTheFirstTime = false;
 
 
     //TODO DELETE this later, it's just a tester (vid 7)
@@ -86,6 +90,8 @@ public class Gameplay implements Screen, ContactListener {
                     new Vector2(0, -9.8f),  //gravetat
                     true
         );
+        //inform the world that the contact listener is the Gameplay class:
+        world.setContactListener(this);
 
 
 //TODO DELETE (test vid 7)
@@ -122,13 +128,32 @@ public class Gameplay implements Screen, ContactListener {
 
 
 
+    private void checkForFirstTouch() {
+        if (!touchedForTheFirstTime){
+            if (Gdx.input.justTouched()){
+                touchedForTheFirstTime = true;
+                GameManager.getInstance().isPaused = false;
+            }
+        }
+    }
+
+
+
     void update(float dt){
-        handleInput(dt);
-        moveCamera();
-        checkBackgroundsOutOfBounds();
-        cloudsController.setCameraYPos(mainCamera.position.y);
-        cloudsController.createAndArrangeNewClouds();
-        cloudsController.removeOffscreenCollectables();
+
+        checkForFirstTouch();
+
+        if (GameManager.getInstance().isPaused){
+            // No fem res --> no es mou res = joc pausat
+        }
+        else {
+            handleInput(dt);
+            moveCamera();
+            checkBackgroundsOutOfBounds();
+            cloudsController.setCameraYPos(mainCamera.position.y);
+            cloudsController.createAndArrangeNewClouds();
+            cloudsController.removeOffscreenCollectables();
+        }
     }
 
 
@@ -240,6 +265,8 @@ public class Gameplay implements Screen, ContactListener {
         world.step(Gdx.graphics.getDeltaTime(), 6, 2);
     }
 
+
+
     @Override
     public void resize(int width, int height) {
 
@@ -283,6 +310,32 @@ public class Gameplay implements Screen, ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
+
+        Fixture body1, body2;   // el body1 serà sempre el player:
+
+        if (contact.getFixtureA().getUserData() == "Player"){
+            body1 = contact.getFixtureA();
+            body2 = contact.getFixtureB();
+        }
+        else {
+            body1 = contact.getFixtureB();
+            body2 = contact.getFixtureA();
+        }
+
+
+        if (body1.getUserData() == "Player" && body2.getUserData() == "Coin"){
+            //collided with the coin
+            System.out.println("collided with COIN");
+            body2.setUserData("Remove");
+            cloudsController.removeCollectables();
+        }
+
+        if (body1.getUserData() == "Player" && body2.getUserData() == "Life"){
+            //collided with the life
+            System.out.println("collided with LIFE");
+            body2.setUserData("Remove");
+            cloudsController.removeCollectables();
+        }
 
     }
 
