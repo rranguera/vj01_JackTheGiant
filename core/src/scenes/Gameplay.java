@@ -133,12 +133,26 @@ public class Gameplay implements Screen, ContactListener {
 
     void handleInput(float dt){
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-            player.setWalking(true);
-            player.movePlayer(-2);
+            player.setWalking(true);                    // **? al vid 45, min. 2:30, aquesta línia no hi és
+            player.movePlayer(-2f);
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-            player.setWalking(true);
-            player.movePlayer(2);
+            player.setWalking(true);                    // **? al vid 45, min. 2:30, aquesta línia no hi és
+            player.movePlayer(2f);
+        }
+        else {
+            player.setWalking(false);
+        }
+    }
+
+    void handleInputAndroid() {
+        if (Gdx.input.isTouched()){
+            if (Gdx.input.getX() > GameInfo.WIDTH/2){   //hem tocat la part dreta de la pantalla --> anar a la dreta
+                player.movePlayer(2f);
+            }
+            else {      // --> anar a l'esquerra
+                player.movePlayer(-2f);
+            }
         }
         else {
             player.setWalking(false);
@@ -168,6 +182,7 @@ public class Gameplay implements Screen, ContactListener {
         }
         else {
             handleInput(dt);
+            handleInputAndroid();
             moveCamera(dt);
             checkBackgroundsOutOfBounds();
             cloudsController.setCameraYPos(mainCamera.position.y);
